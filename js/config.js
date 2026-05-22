@@ -3,8 +3,8 @@
 // ============================================================
 
 // Supabase credentials (REPLACE with your project values)
-export const SUPABASE_URL = 'https://xxxxxxxxxxxx.supabase.co';
-export const SUPABASE_ANON_KEY = 'your-anon-key-here';
+export const SUPABASE_URL = 'https://dstvhnsoxbltzloiwbqv.supabase.co';
+export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzdHZobnNveGJsdHpsb2l3YnF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0MTM1MDgsImV4cCI6MjA5NDk4OTUwOH0.m1YcrmhzYhGezLdR3J_q7X7NtvmxfXA8OXyRAp_kexk';
 
 // Session storage key
 export const AUTH_SESSION_KEY = 'lianli_auth';
