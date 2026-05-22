@@ -32,10 +32,6 @@ async function handleSubmit() {
         showError('请输入密码');
         return;
     }
-    if (!/^\d+$/.test(password)) {
-        showError('密码为纯数字');
-        return;
-    }
 
     if (lockoutUntil && Date.now() < lockoutUntil) {
         const remaining = Math.ceil((lockoutUntil - Date.now()) / 1000);
