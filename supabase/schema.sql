@@ -119,7 +119,7 @@ CREATE OR REPLACE FUNCTION verify_password(input_password TEXT)
 RETURNS BOOLEAN
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = 'public'
 AS $$
 DECLARE
     stored_hash TEXT;
@@ -141,7 +141,7 @@ CREATE OR REPLACE FUNCTION get_voice_play_count(note_id UUID)
 RETURNS INT
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = 'public'
 AS $$
 BEGIN
     RETURN (SELECT COUNT(*) FROM voice_play_log WHERE voice_play_log.note_id = note_id);
@@ -153,7 +153,7 @@ CREATE OR REPLACE FUNCTION record_voice_play(note_id UUID)
 RETURNS VOID
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = 'public'
 AS $$
 BEGIN
     INSERT INTO voice_play_log (note_id) VALUES (note_id);
