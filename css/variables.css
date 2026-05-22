@@ -1,0 +1,68 @@
+:root {
+    /* === Color Palette === */
+    --color-paper:        #f5f0e8;
+    --color-pink:         #e8d5d0;
+    --color-ink:          #3a3a3a;
+    --color-blue:         #d4e4ed;
+    --color-vermilion:    #c45a4a;
+
+    /* === Semantic Tokens === */
+    --bg-primary:         var(--color-paper);
+    --bg-accent:          var(--color-pink);
+    --text-primary:       var(--color-ink);
+    --text-secondary:     rgba(58, 58, 58, 0.55);
+    --text-muted:         rgba(58, 58, 58, 0.35);
+    --border-color:       rgba(58, 58, 58, 0.1);
+    --shadow-card:        0 2px 12px rgba(58, 58, 58, 0.08);
+    --shadow-card-hover:  0 4px 20px rgba(58, 58, 58, 0.14);
+    --shadow-float:       0 8px 32px rgba(58, 58, 58, 0.12);
+    --seal-color:         var(--color-vermilion);
+
+    /* === Typography === */
+    --font-body:          'Noto Serif SC', 'Source Han Serif SC', 'SimSun', 'KaiTi', serif;
+    --font-title:         'Ma Shan Zheng', 'ZCOOL KuaiLe', 'KaiTi', var(--font-body);
+    --font-size-xs:       0.75rem;
+    --font-size-sm:       0.875rem;
+    --font-size-base:     1rem;
+    --font-size-lg:       1.25rem;
+    --font-size-xl:       1.5rem;
+    --font-size-2xl:      2rem;
+    --font-size-3xl:      2.5rem;
+    --leading-relaxed:    1.75;
+    --leading-normal:     1.5;
+    --leading-tight:      1.25;
+
+    /* === Spacing === */
+    --space-1:            0.25rem;
+    --space-2:            0.5rem;
+    --space-3:            0.75rem;
+    --space-4:            1rem;
+    --space-5:            1.25rem;
+    --space-6:            1.5rem;
+    --space-8:            2rem;
+    --space-10:           2.5rem;
+    --space-12:           3rem;
+    --space-16:           4rem;
+
+    /* === Layout === */
+    --content-max-width:  480px;
+    --content-padding-x:  1.25rem;
+    --bamboo-slat-width:  36px;
+
+    /* === Z-Index Scale === */
+    --z-base:             1;
+    --z-above:            10;
+    --z-overlay:          100;
+    --z-curtain:          200;
+    --z-poem:             300;
+    --z-easter-egg:       400;
+
+    /* === Animation Timing === */
+    --ease-out-expo:      cubic-bezier(0.19, 1, 0.22, 1);
+    --ease-out-back:      cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    --ease-ink:           cubic-bezier(0.25, 0.1, 0.25, 1);
+    --duration-fast:      200ms;
+    --duration-normal:    400ms;
+    --duration-slow:      600ms;
+    --duration-poem:      3000ms;
+}

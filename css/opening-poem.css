@@ -1,0 +1,36 @@
+/* === Opening Poem Transition === */
+
+#opening-poem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.poem-wrapper {
+    text-align: center;
+    padding: var(--space-8);
+}
+
+.poem-lines {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+}
+
+.poem-line-main {
+    font-family: var(--font-title);
+    font-size: var(--font-size-3xl);
+    color: var(--text-primary);
+    letter-spacing: 0.2em;
+    line-height: var(--leading-relaxed);
+    opacity: 0;
+}
+
+.poem-line-source {
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-top: var(--space-3);
+    opacity: 0;
+}

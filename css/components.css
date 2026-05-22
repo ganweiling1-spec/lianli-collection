@@ -1,0 +1,310 @@
+/* === Paper Texture Background === */
+.paper-texture {
+    background-color: var(--bg-primary);
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(200, 190, 180, 0.04) 2px,
+            rgba(200, 190, 180, 0.04) 4px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 1px,
+            rgba(200, 190, 180, 0.025) 1px,
+            rgba(200, 190, 180, 0.025) 3px
+        );
+}
+
+/* === Ink Drop FAB === */
+.ink-drop-fab {
+    position: fixed;
+    bottom: var(--space-8);
+    right: var(--space-6);
+    width: 48px;
+    height: 48px;
+    border-radius: 50% 50% 50% 10%;
+    background: var(--color-ink);
+    color: var(--bg-primary);
+    font-size: var(--font-size-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-card);
+    z-index: var(--z-above);
+    transition: transform var(--duration-fast) var(--ease-out-expo);
+    transform: rotate(-8deg);
+}
+
+.ink-drop-fab:active {
+    transform: rotate(-8deg) scale(0.92);
+}
+
+/* === Polaroid Card Base === */
+.polaroid-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-3);
+    padding-bottom: var(--space-6);
+    transition: transform var(--duration-fast) var(--ease-out-expo),
+                box-shadow var(--duration-fast) var(--ease-out-expo);
+}
+
+.polaroid-card:active {
+    transform: translateY(-4px) rotate(-0.5deg);
+    box-shadow: var(--shadow-card-hover);
+}
+
+@media (hover: hover) {
+    .polaroid-card:hover {
+        transform: translateY(-4px) rotate(-0.5deg);
+        box-shadow: var(--shadow-card-hover);
+    }
+}
+
+/* === Wind Chime Note Card === */
+.chime-note {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(200, 190, 180, 0.2);
+    border-radius: 4px 16px 4px 16px;
+    padding: var(--space-5);
+    position: relative;
+    box-shadow: var(--shadow-card);
+    transform-origin: top center;
+    transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+@media (hover: hover) {
+    .chime-note:hover {
+        animation: chime-sway 2s ease-in-out infinite;
+    }
+}
+
+.chime-note::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 12px;
+    background: rgba(180, 170, 155, 0.5);
+}
+
+.chime-note::after {
+    content: '';
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-vermilion);
+    opacity: 0.6;
+}
+
+/* === Habit Category Icon === */
+.habit-icon {
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+/* === Space Indicator Dots === */
+.space-indicators {
+    position: fixed;
+    bottom: var(--space-6);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: var(--space-3);
+    z-index: var(--z-above);
+}
+
+.space-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+.space-dot.active {
+    background: var(--color-ink);
+    transform: scale(1.3);
+}
+
+/* === Top Poem Bar === */
+.top-poem-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-above);
+    padding: var(--space-4) var(--content-padding-x);
+    text-align: center;
+    background: linear-gradient(to bottom, var(--bg-primary), var(--bg-primary) 60%, transparent);
+    pointer-events: none;
+}
+
+.top-poem-bar .poem-text {
+    font-family: var(--font-title);
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+    line-height: var(--leading-tight);
+    pointer-events: auto;
+    cursor: default;
+    user-select: none;
+}
+
+/* === Hidden Scroll Overlay === */
+.hidden-scroll-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-easter-egg);
+    background: rgba(30, 25, 20, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--duration-normal) var(--ease-out-expo);
+    padding: var(--space-8);
+}
+
+.hidden-scroll-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.scroll-paper {
+    width: 100%;
+    max-width: 360px;
+    background: var(--bg-primary);
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(200, 190, 180, 0.04) 2px,
+            rgba(200, 190, 180, 0.04) 4px
+        );
+    box-shadow: var(--shadow-float);
+    padding: var(--space-8) var(--space-6);
+    position: relative;
+    overflow: hidden;
+}
+
+.scroll-rod {
+    height: 8px;
+    background: linear-gradient(to bottom, #c8b89a, #a89880, #c8b89a);
+    border-radius: 2px;
+    margin: var(--space-2) 0;
+}
+
+.scroll-text {
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    line-height: 2;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: var(--space-4) 0;
+    text-align: start;
+}
+
+.scroll-seal {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--space-4);
+}
+
+.scroll-seal img {
+    width: 48px;
+    height: 48px;
+    opacity: 0.85;
+}
+
+/* === Voice Icon === */
+.voice-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity var(--duration-fast);
+    flex-shrink: 0;
+}
+
+.voice-icon:hover {
+    opacity: 0.8;
+}
+
+.voice-icon.played {
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+/* === Empty State === */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 40vh;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    text-align: center;
+    padding: var(--space-8);
+}
+
+/* === Loading State === */
+.loading-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40vh;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+}
+
+/* === Error State === */
+.error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 40vh;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    text-align: center;
+    padding: var(--space-8);
+}
+
+/* === View Transition === */
+.view {
+    position: fixed;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--duration-slow) var(--ease-out-expo);
+    overflow-y: auto;
+}
+
+.view.active {
+    opacity: 1;
+    pointer-events: auto;
+}

@@ -1,0 +1,108 @@
+/* === Space: 冷暖共知 (Habits) === */
+
+#space-habits {
+    background: linear-gradient(180deg, #f5f0e8 0%, #d4e4ed 50%, #f5f0e8 100%);
+}
+
+/* === Dual Column Layout === */
+.habits-columns {
+    display: flex;
+    gap: var(--space-4);
+}
+
+.habits-column {
+    flex: 1;
+    min-width: 0;
+}
+
+.habits-column-header {
+    font-family: var(--font-title);
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    text-align: center;
+    padding-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
+    position: relative;
+}
+
+.habits-column-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 1px;
+    background: var(--border-color);
+}
+
+/* === Habit Item === */
+.habit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-2);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+    transition: background var(--duration-fast);
+    cursor: default;
+}
+
+.habit-item:active {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+/* === Habit Icon === */
+.habit-icon-svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    opacity: 0.45;
+}
+
+/* === Habit Category Tag === */
+.habit-category-tag {
+    font-family: var(--font-body);
+    font-size: 0.625rem;
+    color: var(--color-vermilion);
+    opacity: 0.6;
+    display: inline-block;
+    padding: 1px 5px;
+    border: 1px solid rgba(196, 90, 74, 0.15);
+    border-radius: 2px;
+    margin-bottom: var(--space-1);
+    letter-spacing: 0.1em;
+}
+
+/* === Habit Content === */
+.habit-content {
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    line-height: var(--leading-relaxed);
+    flex: 1;
+    min-width: 0;
+}
+
+/* === Habit Note (hidden by default, shown on tap) === */
+.habit-note {
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    margin-top: var(--space-1);
+    font-style: italic;
+    display: none;
+    line-height: var(--leading-relaxed);
+}
+
+.habit-item.expanded .habit-note {
+    display: block;
+}
+
+/* === Mobile: stack columns === */
+@media (max-width: 380px) {
+    .habits-columns {
+        flex-direction: column;
+        gap: var(--space-6);
+    }
+}

@@ -1,0 +1,123 @@
+/* === Space: 展齿苍苔 (Moments) === */
+
+#space-moments {
+    background: var(--bg-primary);
+}
+
+/* === Polaroid Card Grid === */
+.moments-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+
+/* === Polaroid Card === */
+.polaroid-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-3);
+    padding-bottom: var(--space-5);
+    transition: transform var(--duration-fast) var(--ease-out-expo),
+                box-shadow var(--duration-fast) var(--ease-out-expo);
+    will-change: transform;
+}
+
+.polaroid-card:active {
+    transform: translateY(-3px) rotate(-0.3deg);
+    box-shadow: var(--shadow-card-hover);
+}
+
+@media (hover: hover) {
+    .polaroid-card:hover {
+        transform: translateY(-3px) rotate(-0.3deg);
+        box-shadow: var(--shadow-card-hover);
+    }
+}
+
+/* === Polaroid Image === */
+.polaroid-image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: #e8e0d5;
+    margin-bottom: var(--space-3);
+}
+
+.polaroid-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.polaroid-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-title);
+    font-size: var(--font-size-2xl);
+    color: var(--text-muted);
+    background: linear-gradient(135deg, #f0ebe0 0%, #e8e0d5 100%);
+}
+
+/* === Polaroid Caption === */
+.polaroid-caption {
+    padding: var(--space-2) var(--space-1) 0;
+    position: relative;
+}
+
+.polaroid-solar-term {
+    display: inline-block;
+    font-family: var(--font-title);
+    font-size: var(--font-size-xs);
+    color: var(--color-vermilion);
+    opacity: 0.7;
+    margin-bottom: var(--space-1);
+    padding: 1px 6px;
+    border: 1px solid rgba(196, 90, 74, 0.2);
+    border-radius: 2px;
+}
+
+.polaroid-solar-term.season-spring { color: #7a9e6b; border-color: rgba(122, 158, 107, 0.25); }
+.polaroid-solar-term.season-summer { color: #c45a4a; border-color: rgba(196, 90, 74, 0.25); }
+.polaroid-solar-term.season-autumn { color: #b8844a; border-color: rgba(184, 132, 74, 0.25); }
+.polaroid-solar-term.season-winter { color: #5a7a9e; border-color: rgba(90, 122, 158, 0.25); }
+
+.polaroid-title {
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-1);
+}
+
+.polaroid-description {
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+}
+
+.polaroid-location {
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    margin-top: var(--space-2);
+}
+
+/* === Ink Boot Print (replaces date stamp) === */
+.polaroid-boot-print {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    opacity: 0.3;
+    background: var(--color-ink);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C8 2 4 6 4 10c0 4 3 7 8 10 5-3 8-6 8-10 0-4-4-8-8-8zm0 14c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C8 2 4 6 4 10c0 4 3 7 8 10 5-3 8-6 8-10 0-4-4-8-8-8zm0 14c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    mask-size: contain;
+}
