@@ -31,15 +31,15 @@ export function initBambooScroll() {
         window.addEventListener('mouseup', onDragEnd);
     }
 
-    // Sync dots on scroll
+    // Sync tab bar on scroll
     scrollContainer.addEventListener('scroll', throttle(() => {
-        syncActiveDot();
+        syncActiveTab();
     }, 100), { passive: true });
 
-    // Dot click to navigate
-    $$('.space-dot').forEach(dot => {
-        dot.addEventListener('click', () => {
-            const index = parseInt(dot.dataset.index);
+    // Bottom tab bar click to navigate
+    $$('.tab-item').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const index = parseInt(tab.dataset.space);
             snapTo(index);
         });
     });
@@ -83,7 +83,6 @@ function onDragMove(e) {
     }
 
     if (e.touches && e.cancelable) {
-        // Only prevent default for horizontal swipes
         if (Math.abs(dx) > 10) {
             e.preventDefault();
         }
@@ -115,7 +114,6 @@ function onDragEnd() {
         const momentumDistance = velocity * 150;
         const targetScroll = scrollContainer.scrollLeft - momentumDistance;
 
-        // Snap to nearest panel
         const targetIndex = Math.round(targetScroll / panelWidth);
         snapTo(Math.max(0, Math.min(2, targetIndex)));
     }
@@ -138,52 +136,33 @@ export function snapTo(index) {
     scrollContainer.style.scrollBehavior = 'smooth';
     scrollContainer.scrollLeft = targetScroll;
 
-    // Reset scroll behavior after animation
     setTimeout(() => {
         scrollContainer.style.scrollBehavior = '';
     }, SCROLL_SNAP_DURATION);
 
-    // Update state if needed
     if (appState.currentSpace !== index) {
         appState.currentSpace = index;
     }
 
-    syncActiveDot();
-    updateTopPoem(index);
+    syncActiveTab();
 }
 
-function syncActiveDot() {
+function syncActiveTab() {
+    if (!scrollContainer) return;
     const panelWidth = scrollContainer.clientWidth;
     const currentIndex = Math.round(scrollContainer.scrollLeft / panelWidth);
 
-    $$('.space-dot').forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentIndex);
+    $$('.tab-item').forEach((tab, i) => {
+        tab.classList.toggle('active', i === currentIndex);
     });
-}
 
-function updateTopPoem(index) {
-    const poemText = $('#top-poem-text');
-    const poemSubtext = $('#top-poem-subtext');
-    if (!poemText) return;
-
-    const poems = [
-        '应怜屐齿印苍苔',
-        '风乍起，吹皱一池春水',
-        '如人饮水，冷暖共知',
-    ];
-    const subtexts = [
-        '展齿苍苔',
-        '春水温澜',
-        '冷暖共知',
-    ];
-
-    // Fade transition
-    poemText.style.transition = 'opacity 300ms var(--ease-out-expo)';
-    poemText.style.opacity = '0';
-
-    setTimeout(() => {
-        poemText.textContent = poems[index] || poems[0];
-        poemSubtext.textContent = subtexts[index] || subtexts[0];
-        poemText.style.opacity = '1';
-    }, 300);
+    // Show/hide FAB buttons based on current space
+    const fabs = document.querySelectorAll('.ink-drop-fab');
+    fabs.forEach((fab, i) => {
+        const spacePanel = fab.closest('.space-panel');
+        if (spacePanel) {
+            const spaceIndex = parseInt(spacePanel.dataset.space);
+            fab.style.display = spaceIndex === currentIndex ? '' : 'none';
+        }
+    });
 }

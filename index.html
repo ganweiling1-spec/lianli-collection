@@ -26,6 +26,10 @@
     <link rel="stylesheet" href="css/space-lovenotes.css">
     <link rel="stylesheet" href="css/space-habits.css">
     <link rel="stylesheet" href="css/easter-eggs.css">
+    <link rel="stylesheet" href="css/bottom-tab-bar.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/timeline.css">
+    <link rel="stylesheet" href="css/wordcloud.css">
 
     <script type="importmap">
     {
@@ -78,11 +82,8 @@
     View 3: Main View (三空间)
     ============================================================ -->
     <section id="main-view" class="view paper-texture">
-        <!-- Top poem bar (triple-click target for easter egg) -->
-        <div id="top-poem-bar" class="top-poem-bar">
-            <p class="poem-text" id="top-poem-text">应怜屐齿印苍苔</p>
-            <p class="poem-subtext" id="top-poem-subtext"></p>
-        </div>
+        <!-- Countdown bar -->
+        <div id="countdown-bar" class="countdown-bar"></div>
 
         <!-- Bamboo scroll container -->
         <div id="bamboo-scroll" class="bamboo-scroll">
@@ -122,12 +123,27 @@
             </div>
         </div>
 
-        <!-- Space indicators -->
-        <div class="space-indicators">
-            <span class="space-dot active" data-index="0"></span>
-            <span class="space-dot" data-index="1"></span>
-            <span class="space-dot" data-index="2"></span>
-        </div>
+        <!-- Bottom Tab Bar -->
+        <nav class="bottom-tab-bar">
+            <button class="tab-item active" data-space="0" aria-label="展齿苍苔">
+                <span class="tab-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="1.5"/><path d="M9 14c0 0 1-4 3-4s3 4 3 4"/><path d="M7 14c0 0 2-6 5-6s5 6 5 6"/></svg>
+                </span>
+                <span class="tab-label">展齿苍苔</span>
+            </button>
+            <button class="tab-item" data-space="1" aria-label="春水温澜">
+                <span class="tab-icon">
+                    <svg viewBox="0 0 24 24"><path d="M6 12c0 0 3-5 6-5s6 5 6 5"/><path d="M4 14c0 0 4-8 8-8s8 8 8 8"/></svg>
+                </span>
+                <span class="tab-label">春水温澜</span>
+            </button>
+            <button class="tab-item" data-space="2" aria-label="冷暖共知">
+                <span class="tab-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="2.5"/><circle cx="15" cy="15" r="2.5"/><path d="M10.5 10.5l3 3"/></svg>
+                </span>
+                <span class="tab-label">冷暖共知</span>
+            </button>
+        </nav>
 
         <!-- Hidden scroll easter egg -->
         <div id="hidden-scroll" class="hidden-scroll-overlay">

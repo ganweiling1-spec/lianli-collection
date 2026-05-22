@@ -66,3 +66,29 @@
     --duration-slow:      600ms;
     --duration-poem:      3000ms;
 }
+
+/* === Night Mode (暖黄灯) === */
+body.night-mode {
+    --bg-primary:         #faf3e6;
+    --bg-accent:          #f0e0d0;
+    --text-primary:       #4a3830;
+    --text-secondary:     rgba(74, 56, 48, 0.55);
+    --text-muted:         rgba(74, 56, 48, 0.35);
+    --border-color:       rgba(74, 56, 48, 0.1);
+    --shadow-card:        0 2px 12px rgba(74, 56, 48, 0.08);
+    --shadow-card-hover:  0 4px 20px rgba(74, 56, 48, 0.14);
+    --shadow-float:       0 8px 32px rgba(74, 56, 48, 0.12);
+    --color-vermilion:    #b84a3a;
+    --color-ink:          #4a3830;
+}
+
+body.night-mode {
+    background-color: #f0e8d8;
+}
+
+body.night-mode .paper-texture {
+    background-color: #faf3e6;
+    background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(180, 160, 140, 0.05) 2px, rgba(180, 160, 140, 0.05) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(180, 160, 140, 0.03) 1px, rgba(180, 160, 140, 0.03) 3px);
+}

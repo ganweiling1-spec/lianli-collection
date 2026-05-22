@@ -51,6 +51,25 @@
     background: rgba(0, 0, 0, 0.02);
 }
 
+.habit-item-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.habit-item-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex-shrink: 0;
+    opacity: 0;
+    transition: opacity var(--duration-fast);
+}
+
+.habit-item:hover .habit-item-actions,
+.habit-item:active .habit-item-actions {
+    opacity: 1;
+}
+
 /* === Habit Icon === */
 .habit-icon-svg {
     width: 18px;

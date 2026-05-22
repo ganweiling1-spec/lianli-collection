@@ -61,7 +61,7 @@
 /* === Space Body === */
 .space-body {
     flex: 1;
-    padding: 0 var(--content-padding-x) var(--space-16);
+    padding: 0 var(--content-padding-x) calc(56px + var(--space-16) + env(safe-area-inset-bottom, 0px));
 }
 
 /* === PC: Letter-style narrow layout === */

@@ -12,13 +12,18 @@ let clickTimer = null;
 let scrollRevealed = false;
 
 export function initEasterEggs() {
-    // Triple-click on top poem bar to reveal scroll
-    const poemBar = $('#top-poem-bar');
-    if (poemBar) {
-        poemBar.addEventListener('click', (e) => {
-            handleTopPoemClick(e);
-        });
-    }
+    // Triple-click on countdown bar to reveal scroll
+    window.addEventListener('view-changed', (e) => {
+        if (e.detail.view === 'main') {
+            const countdownBar = $('#countdown-bar');
+            if (countdownBar && !countdownBar._easterEggBound) {
+                countdownBar._easterEggBound = true;
+                countdownBar.addEventListener('click', (e) => {
+                    handleEasterEggClick(e);
+                });
+            }
+        }
+    });
 
     // Click on overlay to dismiss scroll
     const overlay = $('#hidden-scroll');
@@ -47,7 +52,7 @@ export function initEasterEggs() {
     });
 }
 
-function handleTopPoemClick(e) {
+function handleEasterEggClick(e) {
     // Prevent triggering when user is interacting with other elements
     if (e.target.closest('.space-dot') || e.target.closest('button')) return;
 

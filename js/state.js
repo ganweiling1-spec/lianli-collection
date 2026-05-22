@@ -23,6 +23,10 @@ class AppState {
         this.loveNotes = [];
         this.habits = [];
         this.scrollContent = null;
+
+        // Display modes
+        this.momentsDisplayMode = 'grid';    // 'grid' | 'timeline'
+        this.loveNoteDisplayMode = 'list';   // 'list' | 'sticky' | 'letter' | 'cloud'
     }
 
     /**

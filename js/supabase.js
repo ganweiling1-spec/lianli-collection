@@ -1,5 +1,5 @@
 // ============================================================
-// 无色笺 — Supabase Client & API Wrappers
+// 无色笺 — Supabase Client & API Wrappers (v2)
 // ============================================================
 
 import { createClient } from '@supabase/supabase-js';
@@ -14,41 +14,61 @@ export async function verifyPassword(password) {
         input_password: password,
     });
     if (error) throw error;
-    return data; // boolean
+    return data;
 }
 
-// --- Moments (展齿苍苔) ---
+// --- Generic CRUD ---
+
+export async function fetchAll(table, orderCol = 'sort_order', ascending = true) {
+    const { data, error } = await supabase
+        .from(table)
+        .select('*')
+        .order(orderCol, { ascending });
+    if (error) throw error;
+    return data;
+}
+
+export async function insertRecord(table, record) {
+    const { data, error } = await supabase
+        .from(table)
+        .insert(record)
+        .select()
+        .single();
+    if (error) throw error;
+    return data;
+}
+
+export async function updateRecord(table, id, updates) {
+    const { data, error } = await supabase
+        .from(table)
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+    if (error) throw error;
+    return data;
+}
+
+export async function deleteRecord(table, id) {
+    const { error } = await supabase
+        .from(table)
+        .delete()
+        .eq('id', id);
+    if (error) throw error;
+}
+
+// --- Specific fetchers (kept for backward compat) ---
 
 export async function fetchMoments() {
-    const { data, error } = await supabase
-        .from('moments')
-        .select('*')
-        .order('sort_order', { ascending: true })
-        .order('recorded_date', { ascending: false });
-    if (error) throw error;
-    return data;
+    return fetchAll('moments', 'sort_order', true);
 }
-
-// --- Love Notes (春水温澜) ---
 
 export async function fetchLoveNotes() {
-    const { data, error } = await supabase
-        .from('love_notes')
-        .select('*')
-        .order('sort_order', { ascending: true });
-    if (error) throw error;
-    return data;
+    return fetchAll('love_notes', 'sort_order', true);
 }
 
-// --- Habits (冷暖共知) ---
-
 export async function fetchHabits() {
-    const { data, error } = await supabase
-        .from('habits')
-        .select('*')
-        .order('sort_order', { ascending: true });
-    if (error) throw error;
-    return data;
+    return fetchAll('habits', 'sort_order', true);
 }
 
 // --- Voice Play Tracking ---
@@ -79,7 +99,42 @@ export async function fetchScrollContent() {
     return data;
 }
 
-// --- Image URL Helper ---
+// --- Storage: Upload ---
+
+export async function uploadFile(bucket, filePath, file) {
+    const { data, error } = await supabase.storage
+        .from(bucket)
+        .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: true,
+        });
+    if (error) throw error;
+    return data;
+}
+
+export async function uploadImage(file) {
+    const timestamp = Date.now();
+    const ext = file.name.split('.').pop() || 'jpg';
+    const path = `moments/${timestamp}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    await uploadFile('moments-images', path, file);
+    return path; // return just the storage path
+}
+
+export async function uploadAudio(blob) {
+    const timestamp = Date.now();
+    const path = `voices/${timestamp}_${Math.random().toString(36).slice(2, 8)}.webm`;
+    await uploadFile('voice-recordings', path, blob);
+    return path; // return just the storage path
+}
+
+export async function deleteStorageFile(bucket, path) {
+    const { error } = await supabase.storage
+        .from(bucket)
+        .remove([path]);
+    if (error) throw error;
+}
+
+// --- URL Helpers ---
 
 export function getPublicImageUrl(bucket, path) {
     if (!path) return null;
@@ -87,10 +142,11 @@ export function getPublicImageUrl(bucket, path) {
     return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`;
 }
 
-// --- Audio URL Helper ---
-
 export function getPublicAudioUrl(bucket, path) {
     if (!path) return null;
     if (path.startsWith('http')) return path;
     return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`;
 }
+
+// Export supabase client for direct use
+export { supabase };
