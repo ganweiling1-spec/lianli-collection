@@ -228,7 +228,9 @@ function openMomentForm(existing = null) {
                         } catch (err) {
                             console.error('Image upload failed:', err);
                             if (err.message && (err.message.includes('row-level security') || err.message.includes('rls'))) {
-                                alert('图片上传权限不足。请在 Supabase SQL Editor 中运行 supabase/fix-all-policies.sql 修复。');
+                                alert('Storage bucket 未创建或未公开。请在 Supabase SQL Editor 运行 supabase/fix-all-policies.sql（已包含创建 bucket 命令）');
+                            } else if (err.message && err.message.includes('not found')) {
+                                alert('Storage bucket 不存在。请在 Supabase SQL Editor 运行 supabase/fix-all-policies.sql');
                             } else {
                                 alert('图片上传失败：' + (err.message || '请重试'));
                             }
