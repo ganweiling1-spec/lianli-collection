@@ -4,31 +4,34 @@
     background: var(--bg-primary);
 }
 
-/* === Lovenotes List === */
+/* ========================================
+   List Mode (默认列表模式)
+   ======================================== */
+
 .note-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-1);
     padding-top: var(--space-4);
 }
 
 .note-list-item {
     display: flex;
     flex-direction: column;
-    padding: var(--space-3);
+    padding: var(--space-3) var(--space-3);
     background: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-bottom: 1px solid var(--border-color);
     cursor: pointer;
     transition: background var(--duration-fast);
     writing-mode: horizontal-tb;
+    text-align: justify;
 }
 
 .note-list-item:active {
     background: rgba(0,0,0,0.02);
 }
 
-/* Row 1: speaker label + content */
+/* Row 1: speaker label (left) + content (fills space) */
 .note-list-main {
     display: flex;
     align-items: baseline;
@@ -41,31 +44,27 @@
     font-size: var(--font-size-sm);
     white-space: nowrap;
     flex-shrink: 0;
+    writing-mode: horizontal-tb;
 }
 
-.note-list-speaker.her {
-    color: #c45a4a;
-}
-
-.note-list-speaker.him {
-    color: #4a7a9e;
-}
+.note-list-speaker.her { color: #c45a4a; }
+.note-list-speaker.him { color: #4a7a9e; }
 
 .note-list-content {
     font-family: var(--font-body);
     font-size: var(--font-size-sm);
     color: var(--text-primary);
     line-height: var(--leading-relaxed);
-    text-align: justify;
     writing-mode: horizontal-tb;
     flex: 1;
     min-width: 0;
 }
 
-/* Row 2: date + voice + actions */
+/* Row 2: date (right) + voice + actions */
 .note-list-meta {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: var(--space-2);
     margin-top: var(--space-1);
     writing-mode: horizontal-tb;
@@ -76,10 +75,8 @@
     font-size: 0.6rem;
     color: var(--text-muted);
     white-space: nowrap;
-    flex: 1;
 }
 
-/* Edit/delete buttons hidden by default, shown on click */
 .note-list-actions {
     display: none;
     gap: 2px;
@@ -89,40 +86,88 @@
     display: flex;
 }
 
-/* === Sticky Notes Grid === */
+/* ========================================
+   Sticky Notes Mode (便利贴模式)
+   ======================================== */
+
 .sticky-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    padding-top: var(--space-4);
+}
+
+.sticky-note {
+    aspect-ratio: 1;
+    padding: var(--space-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    line-height: var(--leading-relaxed);
+    box-shadow: var(--shadow-card);
+    border-radius: 2px;
+    position: relative;
+    cursor: pointer;
+    word-break: break-all;
+    writing-mode: horizontal-tb;
+}
+
+.sticky-note:nth-child(6n+1) { background: #fef9e4; transform: rotate(2deg); }
+.sticky-note:nth-child(6n+2) { background: #fdf2e8; transform: rotate(-3deg); }
+.sticky-note:nth-child(6n+3) { background: #eaf2e8; transform: rotate(1.5deg); }
+.sticky-note:nth-child(6n+4) { background: #fdf5e8; transform: rotate(-2deg); }
+.sticky-note:nth-child(6n+5) { background: #f0f4e8; transform: rotate(2.5deg); }
+.sticky-note:nth-child(6n+6) { background: #f8f0e8; transform: rotate(-1.5deg); }
+
+.sticky-pin {
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #e8c8a0 0%, #d4a870 100%);
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+}
+
+/* ========================================
+   Letter Mode (信纸模式)
+   ======================================== */
+
+.letter-list {
+    display: flex;
+    flex-direction: column;
     gap: var(--space-4);
     padding-top: var(--space-4);
 }
 
-/* === Letter Cards === */
-.letter-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
-    padding-top: var(--space-4);
-}
-
 .letter-card {
-    background: rgba(255,255,255,0.6);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: var(--space-5);
+    background: linear-gradient(135deg, #fdfaf0 0%, #faf5e8 100%);
+    border: 1px solid rgba(180, 170, 155, 0.3);
+    border-radius: 4px;
+    padding: var(--space-4) var(--space-4);
     box-shadow: var(--shadow-card);
+    font-family: var(--font-body);
+    writing-mode: horizontal-tb;
 }
 
 .letter-title {
     font-family: var(--font-title);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
     color: var(--text-primary);
-    margin-bottom: var(--space-3);
+    text-align: center;
+    margin-bottom: var(--space-2);
+    letter-spacing: 0.1em;
+    writing-mode: horizontal-tb;
 }
 
 .letter-body {
-    font-family: var(--font-body);
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
     color: var(--text-primary);
     line-height: var(--leading-relaxed);
     text-align: justify;
@@ -130,14 +175,16 @@
 }
 
 .letter-date {
-    font-family: var(--font-body);
+    text-align: right;
     font-size: var(--font-size-xs);
     color: var(--text-muted);
-    margin-top: var(--space-3);
-    text-align: right;
+    margin-top: var(--space-2);
 }
 
-/* === Voice Icon === */
+/* ========================================
+   Voice Icon
+   ======================================== */
+
 .note-voice {
     width: 22px;
     height: 22px;
@@ -162,34 +209,4 @@
 
 .note-voice.unplayed {
     animation: voice-pulse 2s ease-in-out infinite;
-}
-
-.note-voice:active {
-    opacity: 0.8;
-}
-
-/* === Sticky Note === */
-.sticky-note {
-    background: #fef9e7;
-    border: 1px solid rgba(200, 180, 120, 0.3);
-    padding: var(--space-4);
-    position: relative;
-    box-shadow: 2px 2px 8px rgba(0,0,0,0.06);
-    transform: rotate(var(--rot, 2deg));
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    color: var(--text-primary);
-    writing-mode: horizontal-tb;
-}
-
-.sticky-pin {
-    position: absolute;
-    top: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: radial-gradient(circle, #e8c8a0 0%, #d4a870 100%);
-    box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
 }
