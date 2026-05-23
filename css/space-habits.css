@@ -1,7 +1,7 @@
 /* === Space: 冷暖共知 (Habits) === */
 
-#space-habits {
-    background: linear-gradient(180deg, #f5f0e8 0%, #d4e4ed 50%, #f5f0e8 100%);
+#space-habits.snow-bg {
+    background: linear-gradient(180deg, #f5f2ee 0%, #eae8f2 25%, #dee0ee 50%, #e8eaf2 75%, #f5f2ee 100%) !important;
 }
 
 /* === Dual Column Layout === */
@@ -77,6 +77,11 @@
     flex-shrink: 0;
     margin-top: 2px;
     opacity: 0.45;
+}
+
+.habit-icon-svg svg {
+    width: 100%;
+    height: 100%;
 }
 
 /* === Habit Category Tag === */

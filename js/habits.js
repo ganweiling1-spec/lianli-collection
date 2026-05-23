@@ -76,11 +76,11 @@ function renderHabitsView() {
     container.innerHTML = `
         <div class="habits-columns">
             <div class="habits-column" id="habits-her">
-                <h3 class="habits-column-header">关于她</h3>
+                <h3 class="habits-column-header">关于${appState.getSpeakerName('her')}</h3>
                 ${herHabits.map(h => renderHabitItem(h)).join('')}
             </div>
             <div class="habits-column" id="habits-him">
-                <h3 class="habits-column-header">关于他</h3>
+                <h3 class="habits-column-header">关于${appState.getSpeakerName('him')}</h3>
                 ${himHabits.map(h => renderHabitItem(h)).join('')}
             </div>
         </div>
@@ -116,8 +116,8 @@ function openHabitForm(existing = null) {
     content.innerHTML = `
         <label>对象</label>
         <select id="habit-person">
-            <option value="her" ${existing?.person === 'her' ? 'selected' : ''}>她</option>
-            <option value="him" ${existing?.person === 'him' ? 'selected' : ''}>他</option>
+            <option value="her" ${existing?.person === 'her' ? 'selected' : ''}>${appState.getSpeakerName('her')}</option>
+            <option value="him" ${existing?.person === 'him' ? 'selected' : ''}>${appState.getSpeakerName('him')}</option>
         </select>
         <label>分类</label>
         <select id="habit-category">

@@ -2,17 +2,7 @@
 // 无色笺 — Modal Dialog Component
 // ============================================================
 
-/**
- * Show a modal dialog.
- * @param {object} options
- * @param {string} options.title - modal title
- * @param {string|HTMLElement} options.content - body content
- * @param {Array<{text:string, class:string, callback:function}>} options.buttons
- * @param {boolean} options.closeOnBackdrop - dismiss on backdrop click
- * @returns {HTMLElement} the modal element
- */
 export function showModal({ title = '', content = '', buttons = [], closeOnBackdrop = true }) {
-    // Remove any existing modal
     closeModal();
 
     const overlay = document.createElement('div');
@@ -25,7 +15,6 @@ export function showModal({ title = '', content = '', buttons = [], closeOnBackd
         </div>
     `;
 
-    // Set content
     const body = overlay.querySelector('.modal-body');
     if (typeof content === 'string') {
         body.innerHTML = content;
@@ -33,20 +22,20 @@ export function showModal({ title = '', content = '', buttons = [], closeOnBackd
         body.appendChild(content);
     }
 
-    // Set buttons
     const actions = overlay.querySelector('.modal-actions');
     buttons.forEach(btn => {
         const el = document.createElement('button');
         el.className = `modal-btn ${btn.class || ''}`;
         el.textContent = btn.text;
-        el.addEventListener('click', () => {
-            btn.callback?.();
+        el.addEventListener('click', async () => {
+            if (btn.callback) {
+                try { await btn.callback(); } catch (e) { console.error('Modal callback error:', e); }
+            }
             closeModal();
         });
         actions.appendChild(el);
     });
 
-    // Backdrop click
     if (closeOnBackdrop) {
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) closeModal();
@@ -57,9 +46,6 @@ export function showModal({ title = '', content = '', buttons = [], closeOnBackd
     return overlay;
 }
 
-/**
- * Close and remove the current modal.
- */
 export function closeModal() {
     const existing = document.querySelector('.modal-overlay');
     if (existing) {
@@ -69,10 +55,6 @@ export function closeModal() {
     }
 }
 
-/**
- * Show a confirmation dialog.
- * @returns {Promise<boolean>}
- */
 export function confirmDialog(title, message) {
     return new Promise((resolve) => {
         showModal({

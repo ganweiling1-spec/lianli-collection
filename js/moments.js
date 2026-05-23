@@ -70,8 +70,9 @@ function renderMomentCard(moment) {
     const seasonClass = term ? getSeasonClass(term.season) : '';
     const imageUrl = moment.image_url ? getPublicImageUrl('moments-images', moment.image_url) : null;
 
+    const orientClass = moment.image_orientation || 'landscape';
     const imageHTML = imageUrl
-        ? `<div class="polaroid-image"><img src="${imageUrl}" alt="${escapeHTML(moment.title)}" loading="lazy" decoding="async"></div>`
+        ? `<div class="polaroid-image ${orientClass}"><img src="${imageUrl}" alt="${escapeHTML(moment.title)}" loading="lazy" decoding="async"></div>`
         : `<div class="polaroid-image"><div class="polaroid-image-placeholder">${escapeHTML(moment.title.charAt(0))}</div></div>`;
 
     return `
@@ -155,6 +156,7 @@ export function initMomentsCardActions() {
 function openMomentForm(existing = null) {
     const isEdit = !!existing;
     let imageFile = null;
+    let imageOrientation = existing?.image_orientation || 'landscape';
     let imagePreviewUrl = existing?.image_url ? getPublicImageUrl('moments-images', existing.image_url) : null;
 
     const content = document.createElement('div');
@@ -186,6 +188,13 @@ function openMomentForm(existing = null) {
             const { file, previewUrl } = await pickImage();
             imageFile = file;
             imagePreviewUrl = previewUrl;
+            // Detect orientation
+            const img = new Image();
+            img.onload = () => {
+                const r = img.width / img.height;
+                imageOrientation = r > 1.1 ? 'landscape' : r < 0.9 ? 'portrait' : 'square';
+            };
+            img.src = previewUrl;
             imageUpload.innerHTML = `<img src="${previewUrl}" alt="">`;
         } catch (e) {
             // user cancelled
@@ -228,6 +237,7 @@ function openMomentForm(existing = null) {
                         description: desc || null,
                         location: location || null,
                         image_url: imagePath,
+                        image_orientation: imagePath ? imageOrientation : null,
                     };
 
                     try {

@@ -1,68 +1,78 @@
 // ============================================================
-// 无色笺 — Word Cloud Renderer
+// 无色笺 — Word Cloud Renderer (heart-shaped)
 // ============================================================
 
-/**
- * Simple word cloud using Canvas.
- * Extracts words, sizes by frequency, renders with random colors.
- */
 export function renderWordCloud(container, notes) {
-    // Collect all words
     const allText = notes.map(n => n.content).join(' ');
     const words = allText
         .replace(/[，。！？、；：""''「」【】《》（）\s,\.!\?;:'"\[\]\(\)\n\r]+/g, ' ')
         .split(' ')
-        .filter(w => w.length >= 1)
-        .slice(0, 80);
+        .filter(w => w.length >= 1);
 
     if (words.length === 0) {
-        container.innerHTML = '<div class="empty-state">词云无字<br><span style="font-size:0.75rem">添加更多情话来生成词云</span></div>';
+        container.innerHTML = '<div class="empty-state">词云无字</div>';
         return;
     }
 
-    // Count frequencies
     const freq = {};
     words.forEach(w => { freq[w] = (freq[w] || 0) + 1; });
-    const entries = Object.entries(freq)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 50);
+    const entries = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 50);
 
-    // Create canvas
     const canvas = document.createElement('canvas');
-    canvas.width = container.clientWidth || 320;
-    canvas.height = Math.min(400, entries.length * 18 + 100);
-    canvas.style.width = '100%';
-    canvas.style.height = 'auto';
+    const size = Math.min(container.clientWidth || 320, 380);
+    canvas.width = size * 2;
+    canvas.height = size * 2;
+    canvas.style.width = size + 'px';
+    canvas.style.height = size + 'px';
+    canvas.style.display = 'block';
+    canvas.style.margin = '0 auto';
     container.innerHTML = '';
     container.appendChild(canvas);
 
     const ctx = canvas.getContext('2d');
-    const colors = ['#c45a4a', '#3a3a3a', '#7a9e6b', '#b8844a', '#5a7a9e', '#9e7a6b', '#4a7a9e'];
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const scale = canvas.width / 3.2;
+
+    const colors = ['#d4756b', '#c45a4a', '#e89090', '#b84a4a', '#f0a0a0', '#d46060', '#e8b0b0'];
     const maxFreq = entries[0][1];
     const minFreq = entries[entries.length - 1][1];
 
-    // Simple placement: random positions, avoid overlap
     const placed = [];
+
     entries.forEach(([word, count]) => {
-        const size = 12 + ((count - minFreq) / Math.max(1, maxFreq - minFreq)) * 28;
-        ctx.font = `${size}px "Ma Shan Zheng", "KaiTi", serif`;
+        const fontSize = 11 + ((count - minFreq) / Math.max(1, maxFreq - minFreq)) * 22;
+        ctx.font = `${fontSize}px "Ma Shan Zheng", "KaiTi", serif`;
         ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
-        ctx.globalAlpha = 0.5 + (count / maxFreq) * 0.5;
+        ctx.globalAlpha = 0.55 + (count / maxFreq) * 0.45;
 
-        // Try to place without overlap
-        let x, y, attempts = 0;
         const metrics = ctx.measureText(word);
-        const w = metrics.width + 8;
-        const h = size + 4;
-        do {
-            x = Math.random() * (canvas.width - w);
-            y = Math.random() * (canvas.height - h) + h;
-            attempts++;
-        } while (attempts < 50 && placed.some(p =>
-            x < p.x + p.w && x + w > p.x && y < p.y + p.h && y + h > p.y
-        ));
+        const w = metrics.width + 6;
+        const h = fontSize + 4;
 
-        placed.push({ x, y, w, h, word });
-        ctx.fillText(word, x + 4, y);
+        let x, y, placed_ok = false;
+        for (let attempt = 0; attempt < 80; attempt++) {
+            const rx = (Math.random() - 0.5) * canvas.width * 0.85;
+            const ry = (Math.random() - 0.5) * canvas.height * 0.85;
+
+            // Heart: (x²+y²-1)³ - x²y³ ≤ 0
+            const hx = rx / scale;
+            const hy = ry / scale;
+            const val = Math.pow(hx * hx + hy * hy - 1, 3) - hx * hx * hy * hy * hy;
+            if (val > 0) continue;
+
+            x = cx + rx - w / 2;
+            y = cy + ry - h / 2 + 20;
+
+            const overlaps = placed.some(p =>
+                x < p.x + p.w && x + w > p.x && y < p.y + p.h && y + h > p.y
+            );
+            if (!overlaps) { placed_ok = true; break; }
+        }
+
+        if (placed_ok) {
+            placed.push({ x, y, w, h });
+            ctx.fillText(word, x, y + fontSize * 0.8);
+        }
     });
 }

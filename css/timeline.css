@@ -181,30 +181,3 @@
     border-color: var(--color-ink);
 }
 
-/* === Card action buttons (edit/delete) === */
-.card-actions {
-    display: flex;
-    gap: var(--space-2);
-    margin-top: var(--space-3);
-    justify-content: flex-end;
-}
-
-.card-action-btn {
-    padding: var(--space-1) var(--space-3);
-    border: none;
-    border-radius: 4px;
-    background: transparent;
-    color: var(--text-muted);
-    font-family: var(--font-body);
-    font-size: var(--font-size-xs);
-    cursor: pointer;
-    transition: all var(--duration-fast);
-}
-
-.card-action-btn:hover {
-    color: var(--color-vermilion);
-}
-
-.card-action-btn.btn-delete:hover {
-    color: #c0392b;
-}

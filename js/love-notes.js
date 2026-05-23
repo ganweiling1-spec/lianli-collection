@@ -102,7 +102,7 @@ function renderModeToggle() {
 /* ---------- List mode (default) ---------- */
 function renderList(notes, container) {
     const items = notes.map(n => {
-        const speakerLabel = n.speaker === 'her' ? '她' : '他';
+        const speakerLabel = appState.getSpeakerName(n.speaker);
         const speakerClass = n.speaker === 'her' ? 'her' : 'him';
         return `
             <div class="note-list-item" data-id="${n.id}">
@@ -255,9 +255,11 @@ function openNoteForm(existing = null) {
     content.innerHTML = `
         <label>说话的人</label>
         <select id="note-speaker">
-            <option value="her" ${existing?.speaker === 'her' ? 'selected' : ''}>她</option>
-            <option value="him" ${existing?.speaker === 'him' ? 'selected' : ''}>他</option>
+            <option value="her" ${existing?.speaker === 'her' ? 'selected' : ''}>${appState.getSpeakerName('her')}</option>
+            <option value="him" ${existing?.speaker === 'him' ? 'selected' : ''}>${appState.getSpeakerName('him')}</option>
         </select>
+        <label>日期</label>
+        <input type="date" id="note-date" value="${existing?.created_at ? existing.created_at.slice(0, 10) : new Date().toISOString().slice(0, 10)}">
         <label>标题（可选，信纸模式使用）</label>
         <input type="text" id="note-title" value="${escapeHTML(existing?.title || '')}" maxlength="50" placeholder="给这段话取个标题">
         <label>内容</label>
@@ -343,6 +345,7 @@ function openNoteForm(existing = null) {
                 callback: async () => {
                     const speaker = content.querySelector('#note-speaker').value;
                     const title = content.querySelector('#note-title').value.trim();
+                    const noteDate = content.querySelector('#note-date').value;
                     const noteContent = content.querySelector('#note-content').value.trim();
 
                     if (!noteContent) {
@@ -354,6 +357,7 @@ function openNoteForm(existing = null) {
                         speaker,
                         title: title || null,
                         content: noteContent,
+                        created_at: noteDate ? new Date(noteDate + 'T00:00:00+08:00').toISOString() : new Date().toISOString(),
                         has_voice: !!voiceUrl,
                         voice_url: voiceUrl,
                     };

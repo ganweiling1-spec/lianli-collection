@@ -11,6 +11,7 @@ import { initLoveNotes } from './love-notes.js';
 import { initHabits, initHabitsAddButton } from './habits.js';
 import { initEasterEggs } from './easter-eggs.js';
 import { initExtras } from './extras.js';
+import { initSettings } from './settings.js';
 import { $ } from './utils.js';
 
 /**
@@ -26,6 +27,7 @@ function init() {
     initLoveNotes();
     initHabits();
     initEasterEggs();
+    initSettings();
     initExtras();
 
     // Initial view routing

@@ -30,6 +30,8 @@
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/timeline.css">
     <link rel="stylesheet" href="css/wordcloud.css">
+    <link rel="stylesheet" href="css/falling-effects.css">
+    <link rel="stylesheet" href="css/space-settings.css">
 
     <script type="importmap">
     {
@@ -112,13 +114,23 @@
             </div>
 
             <!-- Space 3: 冷暖共知 -->
-            <div class="space-panel" id="space-habits" data-space="2">
+            <div class="space-panel snow-bg" id="space-habits" data-space="2">
                 <div class="space-header">
                     <h2 class="space-title">冷暖共知</h2>
                     <p class="space-poem">如人饮水，冷暖共知</p>
                 </div>
                 <div class="space-body" id="habits-container">
                     <div class="loading-state">研墨中...</div>
+                </div>
+            </div>
+
+            <!-- Space 4: 我的笺 (Settings) -->
+            <div class="space-panel" id="space-settings" data-space="3">
+                <div class="space-header">
+                    <h2 class="space-title">我的笺</h2>
+                    <p class="space-poem">此情深处，红笺为无色</p>
+                </div>
+                <div class="space-body" id="settings-container">
                 </div>
             </div>
         </div>
@@ -142,6 +154,12 @@
                     <svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="2.5"/><circle cx="15" cy="15" r="2.5"/><path d="M10.5 10.5l3 3"/></svg>
                 </span>
                 <span class="tab-label">冷暖共知</span>
+            </button>
+            <button class="tab-item" data-space="3" aria-label="我的笺">
+                <span class="tab-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20v-1a7 7 0 017-7 7 7 0 017 7v1"/></svg>
+                </span>
+                <span class="tab-label">我的笺</span>
             </button>
         </nav>
 
@@ -174,6 +192,7 @@
     <script type="module" src="js/love-notes.js"></script>
     <script type="module" src="js/habits.js"></script>
     <script type="module" src="js/easter-eggs.js"></script>
+    <script type="module" src="js/settings.js"></script>
     <script type="module" src="js/app.js"></script>
 </body>
 </html>

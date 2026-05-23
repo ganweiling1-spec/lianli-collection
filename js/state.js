@@ -2,7 +2,7 @@
 // 无色笺 — AppState Singleton
 // ============================================================
 
-import { AUTH_SESSION_KEY, SPACE_CONFIG } from './config.js';
+import { AUTH_SESSION_KEY, SPACE_CONFIG, DEFAULT_NAMES } from './config.js';
 
 class AppState {
     constructor() {
@@ -27,6 +27,10 @@ class AppState {
         // Display modes
         this.momentsDisplayMode = 'grid';    // 'grid' | 'timeline'
         this.loveNoteDisplayMode = 'list';   // 'list' | 'sticky' | 'letter' | 'cloud'
+
+        // Custom names
+        this.customNames = { her: '她', him: '他' };
+        this.loadCustomNames();
     }
 
     /**
@@ -90,6 +94,33 @@ class AppState {
      */
     getCurrentSpaceConfig() {
         return SPACE_CONFIG[this.currentSpace] || SPACE_CONFIG[0];
+    }
+
+    /**
+     * Load custom names from localStorage.
+     */
+    loadCustomNames() {
+        try {
+            const saved = localStorage.getItem('lianli_names');
+            if (saved) this.customNames = JSON.parse(saved);
+        } catch (e) {
+            this.customNames = { ...DEFAULT_NAMES };
+        }
+    }
+
+    /**
+     * Save custom names to localStorage.
+     */
+    saveCustomNames(names) {
+        this.customNames = { ...names };
+        localStorage.setItem('lianli_names', JSON.stringify(this.customNames));
+    }
+
+    /**
+     * Get display name for a speaker.
+     */
+    getSpeakerName(speaker) {
+        return this.customNames[speaker] || DEFAULT_NAMES[speaker] || speaker;
     }
 
     /**

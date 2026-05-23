@@ -1,7 +1,7 @@
 /* === Space: 春水温澜 (Love Notes) === */
 
-#space-lovenotes {
-    background: linear-gradient(160deg, #f5f0e8 0%, #d4e4ed 30%, #e8d5d0 65%, #f5f0e8 100%);
+#space-lovenotes.water-ripple-bg {
+    background: linear-gradient(180deg, #e8f2f8 0%, #d0e4f0 35%, #c8dce8 55%, #d4e6f2 100%) !important;
 }
 
 /* === Lovenotes List === */

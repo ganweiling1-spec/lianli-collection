@@ -189,6 +189,57 @@
     opacity: 0.85;
 }
 
+/* === Card Action Buttons === */
+.card-actions {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    justify-content: flex-end;
+    opacity: 0;
+    transition: opacity var(--duration-fast);
+}
+
+.polaroid-card:hover .card-actions,
+.polaroid-card:active .card-actions,
+.chime-note:hover .card-actions,
+.chime-note:active .card-actions,
+.letter-card:hover .card-actions,
+.letter-card:active .card-actions,
+.note-list-item:hover .card-actions,
+.note-list-item:active .card-actions,
+.habit-item:hover .habit-item-actions,
+.habit-item:active .habit-item-actions {
+    opacity: 1;
+}
+
+.card-action-btn {
+    padding: var(--space-1) var(--space-3);
+    border: none;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.08);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    cursor: pointer;
+    transition: all var(--duration-fast);
+    opacity: 0.85;
+}
+
+.card-action-btn:hover {
+    background: rgba(0,0,0,0.15);
+    opacity: 1;
+}
+
+.card-action-btn.btn-delete {
+    color: #c0392b;
+    background: rgba(192,57,43,0.1);
+}
+
+.card-action-btn.btn-delete:hover {
+    background: rgba(192,57,43,0.2);
+    color: #a93226;
+}
+
 /* === Voice Icon === */
 .voice-icon {
     width: 20px;

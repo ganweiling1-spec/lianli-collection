@@ -3,9 +3,10 @@
 // ============================================================
 
 import { appState } from './state.js';
-import { SCROLL_SNAP_DURATION } from './config.js';
+import { SCROLL_SNAP_DURATION, SPACE_CONFIG } from './config.js';
 import { $, $$, isTouchDevice, throttle } from './utils.js';
 
+const TOTAL_SPACES = SPACE_CONFIG.length;
 let scrollContainer = null;
 let isDragging = false;
 let startX = 0;
@@ -31,12 +32,10 @@ export function initBambooScroll() {
         window.addEventListener('mouseup', onDragEnd);
     }
 
-    // Sync tab bar on scroll
     scrollContainer.addEventListener('scroll', throttle(() => {
         syncActiveTab();
     }, 100), { passive: true });
 
-    // Bottom tab bar click to navigate
     $$('.tab-item').forEach(tab => {
         tab.addEventListener('click', () => {
             const index = parseInt(tab.dataset.space);
@@ -44,7 +43,6 @@ export function initBambooScroll() {
         });
     });
 
-    // Listen for space-changed events (programmatic navigation)
     window.addEventListener('space-changed', (e) => {
         snapTo(e.detail.spaceIndex);
     });
@@ -57,11 +55,7 @@ function onDragStart(e) {
     lastX = startX;
     lastTime = Date.now();
     velocity = 0;
-
-    if (momentumRaf) {
-        cancelAnimationFrame(momentumRaf);
-        momentumRaf = null;
-    }
+    if (momentumRaf) { cancelAnimationFrame(momentumRaf); momentumRaf = null; }
 }
 
 function onMouseMove(e) {
@@ -71,79 +65,52 @@ function onMouseMove(e) {
 
 function onDragMove(e) {
     if (!isDragging) return;
-
     const x = e.touches ? e.touches[0].clientX : e.clientX;
-    const now = Date.now();
     const dx = x - startX;
-    const panelWidth = scrollContainer.clientWidth;
 
-    // Detect if predominantly vertical scroll (let native scroll handle it)
-    if (e.touches && Math.abs(x - lastX) < Math.abs(e.touches[0].clientY - (e._lastY || 0))) {
-        return;
-    }
-
-    if (e.touches && e.cancelable) {
-        if (Math.abs(dx) > 10) {
-            e.preventDefault();
-        }
-    }
+    if (e.touches && Math.abs(x - lastX) < Math.abs(e.touches[0].clientY - (e._lastY || 0))) return;
+    if (e.touches && e.cancelable && Math.abs(dx) > 10) e.preventDefault();
 
     scrollContainer.scrollLeft = startScrollLeft - dx;
 
-    // Track velocity
+    const now = Date.now();
     const dt = now - lastTime;
-    if (dt > 0) {
-        velocity = (x - lastX) / dt;
-    }
+    if (dt > 0) velocity = (x - lastX) / dt;
     lastX = x;
     lastTime = now;
-
-    if (e.touches) {
-        e._lastY = e.touches[0].clientY;
-    }
+    if (e.touches) e._lastY = e.touches[0].clientY;
 }
 
 function onDragEnd() {
     if (!isDragging) return;
     isDragging = false;
 
-    // Apply momentum
     const absVelocity = Math.abs(velocity);
     if (absVelocity > 0.2) {
         const panelWidth = scrollContainer.clientWidth;
         const momentumDistance = velocity * 150;
         const targetScroll = scrollContainer.scrollLeft - momentumDistance;
-
         const targetIndex = Math.round(targetScroll / panelWidth);
-        snapTo(Math.max(0, Math.min(2, targetIndex)));
+        snapTo(clamp(targetIndex));
     }
 
-    // Always snap to nearest on release
     const panelWidth = scrollContainer.clientWidth;
     const nearestIndex = Math.round(scrollContainer.scrollLeft / panelWidth);
-    snapTo(Math.max(0, Math.min(2, nearestIndex)));
+    snapTo(clamp(nearestIndex));
 }
 
-/**
- * Snap to a specific space panel by index.
- */
+function clamp(index) {
+    return Math.max(0, Math.min(TOTAL_SPACES - 1, index));
+}
+
 export function snapTo(index) {
     if (!scrollContainer) return;
-
+    index = clamp(index);
     const panelWidth = scrollContainer.clientWidth;
-    const targetScroll = index * panelWidth;
-
     scrollContainer.style.scrollBehavior = 'smooth';
-    scrollContainer.scrollLeft = targetScroll;
-
-    setTimeout(() => {
-        scrollContainer.style.scrollBehavior = '';
-    }, SCROLL_SNAP_DURATION);
-
-    if (appState.currentSpace !== index) {
-        appState.currentSpace = index;
-    }
-
+    scrollContainer.scrollLeft = index * panelWidth;
+    setTimeout(() => { scrollContainer.style.scrollBehavior = ''; }, SCROLL_SNAP_DURATION);
+    if (appState.currentSpace !== index) appState.currentSpace = index;
     syncActiveTab();
 }
 
@@ -156,9 +123,8 @@ function syncActiveTab() {
         tab.classList.toggle('active', i === currentIndex);
     });
 
-    // Show/hide FAB buttons based on current space
     const fabs = document.querySelectorAll('.ink-drop-fab');
-    fabs.forEach((fab, i) => {
+    fabs.forEach(fab => {
         const spacePanel = fab.closest('.space-panel');
         if (spacePanel) {
             const spaceIndex = parseInt(spacePanel.dataset.space);

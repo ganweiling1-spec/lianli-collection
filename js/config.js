@@ -29,6 +29,12 @@ export const COLOR = {
     VERMILION: '#c45a4a',
 };
 
+// Anniversary
+export const TOGETHER_DATE = '2025-06-08';
+
+// Custom names (editable in settings)
+export const DEFAULT_NAMES = { her: '她', him: '他' };
+
 // Space titles and poems
 export const SPACE_CONFIG = [
     {
@@ -47,6 +53,12 @@ export const SPACE_CONFIG = [
         id: 'habits',
         name: '冷暖共知',
         poem: '如人饮水，冷暖共知',
+        source: '',
+    },
+    {
+        id: 'settings',
+        name: '我的笺',
+        poem: '此情深处，红笺为无色',
         source: '',
     },
 ];

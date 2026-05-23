@@ -4,11 +4,17 @@
     background: var(--bg-primary);
 }
 
-/* === Polaroid Card Grid === */
+/* === Polaroid Card Grid (2 per page on mobile) === */
 .moments-grid {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-8);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+}
+
+@media (max-width: 360px) {
+    .moments-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* === Polaroid Card === */
@@ -16,21 +22,21 @@
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-card);
-    padding: var(--space-3);
-    padding-bottom: var(--space-5);
+    padding: var(--space-2);
+    padding-bottom: var(--space-4);
     transition: transform var(--duration-fast) var(--ease-out-expo),
                 box-shadow var(--duration-fast) var(--ease-out-expo);
     will-change: transform;
 }
 
 .polaroid-card:active {
-    transform: translateY(-3px) rotate(-0.3deg);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-card-hover);
 }
 
 @media (hover: hover) {
     .polaroid-card:hover {
-        transform: translateY(-3px) rotate(-0.3deg);
+        transform: translateY(-2px);
         box-shadow: var(--shadow-card-hover);
     }
 }
@@ -38,21 +44,34 @@
 /* === Polaroid Image === */
 .polaroid-image {
     width: 100%;
-    aspect-ratio: 4 / 3;
     overflow: hidden;
     background: #e8e0d5;
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-2);
+    position: relative;
+}
+
+.polaroid-image.portrait {
+    aspect-ratio: 3 / 4;
+}
+
+.polaroid-image.landscape {
+    aspect-ratio: 4 / 3;
+}
+
+.polaroid-image.square {
+    aspect-ratio: 1 / 1;
 }
 
 .polaroid-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
 .polaroid-image-placeholder {
+    aspect-ratio: 4 / 3;
     width: 100%;
-    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -64,18 +83,18 @@
 
 /* === Polaroid Caption === */
 .polaroid-caption {
-    padding: var(--space-2) var(--space-1) 0;
+    padding: var(--space-1) var(--space-1) 0;
     position: relative;
 }
 
 .polaroid-solar-term {
     display: inline-block;
     font-family: var(--font-title);
-    font-size: var(--font-size-xs);
+    font-size: 0.6rem;
     color: var(--color-vermilion);
     opacity: 0.7;
     margin-bottom: var(--space-1);
-    padding: 1px 6px;
+    padding: 1px 4px;
     border: 1px solid rgba(196, 90, 74, 0.2);
     border-radius: 2px;
 }
@@ -87,7 +106,7 @@
 
 .polaroid-title {
     font-family: var(--font-body);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-sm);
     color: var(--text-primary);
     line-height: var(--leading-tight);
     margin-bottom: var(--space-1);
@@ -95,8 +114,8 @@
 
 .polaroid-description {
     font-family: var(--font-body);
-    font-size: var(--font-size-sm);
-    color: var(--text-secondary);
+    font-size: var(--font-size-xs);
+    color: rgba(58, 58, 58, 0.72);
     line-height: var(--leading-relaxed);
 }
 
