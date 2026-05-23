@@ -42,6 +42,7 @@
     color: var(--text-primary);
     line-height: var(--leading-relaxed);
     text-align: justify;
+    writing-mode: horizontal-tb;
 }
 
 .note-list-right {
@@ -124,6 +125,7 @@
     color: var(--text-primary);
     line-height: var(--leading-relaxed);
     text-align: justify;
+    writing-mode: horizontal-tb;
 }
 
 .letter-date {
@@ -176,6 +178,7 @@
     cursor: pointer;
     font-size: var(--font-size-sm);
     color: var(--text-primary);
+    writing-mode: horizontal-tb;
 }
 
 .sticky-pin {

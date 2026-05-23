@@ -227,7 +227,11 @@ function openMomentForm(existing = null) {
                             imagePath = await handleImageUpload(imageFile);
                         } catch (err) {
                             console.error('Image upload failed:', err);
-                            alert('图片上传失败：' + (err.message || '请重试'));
+                            if (err.message && (err.message.includes('row-level security') || err.message.includes('rls'))) {
+                                alert('图片上传权限不足。请在 Supabase SQL Editor 中运行 supabase/fix-all-policies.sql 修复。');
+                            } else {
+                                alert('图片上传失败：' + (err.message || '请重试'));
+                            }
                             return;
                         }
                     }
@@ -253,6 +257,10 @@ function openMomentForm(existing = null) {
                         renderCurrentView();
                     } catch (err) {
                         console.error('Save failed:', err);
+                        if (err.message && (err.message.includes('row-level security') || err.message.includes('rls'))) {
+                            alert('权限不足：请在 Supabase SQL Editor 中运行 supabase/fix-all-policies.sql');
+                            return;
+                        }
                         // If column missing, retry without image_orientation
                         if (err.message && (err.message.includes('image_orientation') || err.code === 'PGRST204')) {
                             delete record.image_orientation;

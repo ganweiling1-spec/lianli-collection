@@ -390,7 +390,11 @@ function openNoteForm(existing = null) {
                         renderCurrentView();
                     } catch (err) {
                         console.error('Save failed:', err);
-                        alert('保存失败，请重试');
+                        if (err.message && (err.message.includes('row-level security') || err.message.includes('rls'))) {
+                            alert('权限不足：请在 Supabase SQL Editor 中运行 supabase/fix-all-policies.sql');
+                        } else {
+                            alert('保存失败，请重试');
+                        }
                     }
                 },
             },
