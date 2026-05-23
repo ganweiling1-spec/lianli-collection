@@ -1,7 +1,7 @@
 /* === Space: 冷暖共知 (Habits) === */
 
-#space-habits.snow-bg {
-    background: linear-gradient(180deg, #f5f2ee 0%, #eae8f2 25%, #dee0ee 50%, #e8eaf2 75%, #f5f2ee 100%) !important;
+#space-habits {
+    background: var(--bg-primary);
 }
 
 /* === Dual Column Layout === */

@@ -105,19 +105,35 @@ function renderList(notes, container) {
         const speakerLabel = appState.getSpeakerName(n.speaker);
         const speakerClass = n.speaker === 'her' ? 'her' : 'him';
         return `
-            <div class="note-list-item" data-id="${n.id}">
-                <span class="note-list-speaker ${speakerClass}">${speakerLabel}</span>
-                <span style="flex:1;min-width:0">${escapeHTML(n.content)}</span>
-                ${n.has_voice ? renderVoiceIcon(n) : ''}
-                <span style="font-size:0.65rem;color:var(--text-muted);flex-shrink:0">${formatDate(n.created_at)}</span>
-                <button class="card-action-btn" data-action="edit-note" data-id="${n.id}">编</button>
-                <button class="card-action-btn btn-delete" data-action="delete-note" data-id="${n.id}">删</button>
+            <div class="note-list-item ${speakerClass}" data-id="${n.id}">
+                <div class="note-list-left">
+                    ${n.has_voice ? renderVoiceIcon(n) : ''}
+                    <span class="note-list-content">${escapeHTML(n.content)}</span>
+                </div>
+                <div class="note-list-right">
+                    <span class="note-list-date">${formatDate(n.created_at)}</span>
+                    <span class="note-list-speaker ${speakerClass}">${speakerLabel}</span>
+                    <span class="note-list-actions" data-actions="${n.id}">
+                        <button class="card-action-btn" data-action="edit-note" data-id="${n.id}">编</button>
+                        <button class="card-action-btn btn-delete" data-action="delete-note" data-id="${n.id}">删</button>
+                    </span>
+                </div>
             </div>
         `;
     }).join('');
     container.innerHTML = `<div class="note-list">${items}</div>`;
     attachVoiceListeners(notes);
     attachNoteActions(container);
+    attachListItemClick(container);
+}
+
+function attachListItemClick(container) {
+    container.querySelectorAll('.note-list-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const actions = item.querySelector('.note-list-actions');
+            if (actions) actions.classList.toggle('visible');
+        });
+    });
 }
 
 /* ---------- Sticky mode ---------- */
@@ -145,7 +161,7 @@ function renderLetter(notes, container) {
         <div class="letter-card" data-id="${n.id}">
             ${n.title ? `<div class="letter-title">${escapeHTML(n.title)}</div>` : ''}
             <div class="letter-body">${escapeHTML(n.content)}</div>
-            <div class="letter-date">${formatDate(n.created_at)} ${n.speaker === 'her' ? '· 她' : '· 他'} ${n.has_voice ? renderVoiceIcon(n) : ''}</div>
+            <div class="letter-date">${formatDate(n.created_at)} · ${appState.getSpeakerName(n.speaker)} ${n.has_voice ? renderVoiceIcon(n) : ''}</div>
             <div class="card-actions">
                 <button class="card-action-btn" data-action="edit-note" data-id="${n.id}">编辑</button>
                 <button class="card-action-btn btn-delete" data-action="delete-note" data-id="${n.id}">删除</button>

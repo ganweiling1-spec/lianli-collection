@@ -226,7 +226,8 @@ function openMomentForm(existing = null) {
                         try {
                             imagePath = await handleImageUpload(imageFile);
                         } catch (err) {
-                            alert('图片上传失败，请重试');
+                            console.error('Image upload failed:', err);
+                            alert('图片上传失败：' + (err.message || '请重试'));
                             return;
                         }
                     }
@@ -252,6 +253,24 @@ function openMomentForm(existing = null) {
                         renderCurrentView();
                     } catch (err) {
                         console.error('Save failed:', err);
+                        // If column missing, retry without image_orientation
+                        if (err.message && (err.message.includes('image_orientation') || err.code === 'PGRST204')) {
+                            delete record.image_orientation;
+                            try {
+                                if (isEdit) {
+                                    await updateRecord('moments', existing.id, record);
+                                    const idx = appState.moments.findIndex(m => m.id == existing.id);
+                                    if (idx >= 0) appState.moments[idx] = { ...appState.moments[idx], ...record };
+                                } else {
+                                    const created = await insertRecord('moments', record);
+                                    appState.moments.push(created);
+                                }
+                                renderCurrentView();
+                                return;
+                            } catch (e2) {
+                                console.error('Retry failed:', e2);
+                            }
+                        }
                         alert('保存失败，请重试');
                     }
                 },

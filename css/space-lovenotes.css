@@ -1,107 +1,148 @@
 /* === Space: 春水温澜 (Love Notes) === */
 
-#space-lovenotes.water-ripple-bg {
-    background: linear-gradient(180deg, #e8f2f8 0%, #d0e4f0 35%, #c8dce8 55%, #d4e6f2 100%) !important;
+#space-lovenotes {
+    background: var(--bg-primary);
 }
 
 /* === Lovenotes List === */
-.lovenotes-list {
+.note-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
+    gap: var(--space-3);
     padding-top: var(--space-4);
 }
 
-/* === Wind Chime Note === */
-.chime-note {
-    background: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border: 1px solid rgba(200, 190, 180, 0.15);
-    border-radius: 4px 16px 4px 16px;
-    padding: var(--space-5) var(--space-4);
-    position: relative;
-    box-shadow: var(--shadow-card);
-    transform-origin: top center;
-    transition: transform var(--duration-fast) var(--ease-out-expo);
-    will-change: transform;
-    max-width: 85%;
+.note-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-3);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background var(--duration-fast);
 }
 
-/* Speaker positioning */
-.chime-note.speaker-her {
-    align-self: flex-start;
-    margin-left: var(--space-2);
+.note-list-item:active {
+    background: rgba(0,0,0,0.02);
 }
 
-.chime-note.speaker-him {
-    align-self: flex-end;
-    margin-right: var(--space-2);
-    border-radius: 16px 4px 16px 4px;
+.note-list-left {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
 }
 
-@media (hover: hover) {
-    .chime-note:hover {
-        animation: chime-sway 2s ease-in-out infinite;
-    }
-}
-
-/* Chime string + bell decoration */
-.chime-note::before {
-    content: '';
-    position: absolute;
-    top: -14px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 1px;
-    height: 14px;
-    background: rgba(180, 170, 155, 0.4);
-}
-
-.chime-note::after {
-    content: '';
-    position: absolute;
-    top: -18px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--color-vermilion);
-    opacity: 0.5;
-}
-
-/* === Note Content === */
-.note-content {
+.note-list-content {
     font-family: var(--font-body);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-sm);
     color: var(--text-primary);
     line-height: var(--leading-relaxed);
-    text-align: center;
-    padding: var(--space-2) 0;
+    text-align: justify;
 }
 
-/* === Note Date Stamp === */
-.note-date {
-    text-align: right;
+.note-list-right {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-left: var(--space-3);
+}
+
+.note-list-date {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.note-list-speaker {
     font-family: var(--font-title);
+    font-size: 0.6rem;
+    padding: 1px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+
+.note-list-speaker.her {
+    color: #c45a4a;
+    background: rgba(196, 90, 74, 0.06);
+}
+
+.note-list-speaker.him {
+    color: #4a7a9e;
+    background: rgba(74, 122, 158, 0.06);
+}
+
+/* Edit/delete buttons hidden by default, shown on click */
+.note-list-actions {
+    display: none;
+    gap: 2px;
+}
+
+.note-list-actions.visible {
+    display: flex;
+}
+
+/* === Sticky Notes Grid === */
+.sticky-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    padding-top: var(--space-4);
+}
+
+/* === Letter Cards === */
+.letter-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding-top: var(--space-4);
+}
+
+.letter-card {
+    background: rgba(255,255,255,0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: var(--space-5);
+    box-shadow: var(--shadow-card);
+}
+
+.letter-title {
+    font-family: var(--font-title);
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+}
+
+.letter-body {
+    font-family: var(--font-body);
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+    line-height: var(--leading-relaxed);
+    text-align: justify;
+}
+
+.letter-date {
+    font-family: var(--font-body);
     font-size: var(--font-size-xs);
     color: var(--text-muted);
-    margin-top: var(--space-2);
-    padding-right: var(--space-10);
+    margin-top: var(--space-3);
+    text-align: right;
 }
 
-/* === Voice Whisper Icon === */
+/* === Voice Icon === */
 .note-voice {
-    position: absolute;
-    bottom: var(--space-3);
-    right: var(--space-3);
     width: 22px;
     height: 22px;
     cursor: pointer;
     opacity: 0.45;
     transition: opacity var(--duration-fast);
-    display: flex;
+    flex-shrink: 0;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 }
@@ -122,4 +163,29 @@
 
 .note-voice:active {
     opacity: 0.8;
+}
+
+/* === Sticky Note === */
+.sticky-note {
+    background: #fef9e7;
+    border: 1px solid rgba(200, 180, 120, 0.3);
+    padding: var(--space-4);
+    position: relative;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.06);
+    transform: rotate(var(--rot, 2deg));
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+}
+
+.sticky-pin {
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #e8c8a0 0%, #d4a870 100%);
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
 }

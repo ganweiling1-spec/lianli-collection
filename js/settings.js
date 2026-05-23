@@ -43,7 +43,8 @@ function renderSettings() {
         const her = container.querySelector('#setting-her').value.trim() || '她';
         const him = container.querySelector('#setting-him').value.trim() || '他';
         appState.saveCustomNames({ her, him });
-        alert('称呼已保存');
+        // Trigger re-render of all modules to reflect new names
+        window.dispatchEvent(new CustomEvent('view-changed', { detail: { view: 'main' } }));
     });
 
     container.querySelector('#settings-export').addEventListener('click', () => {

@@ -18,8 +18,12 @@ export function initCountdown() {
     window.addEventListener('view-changed', (e) => {
         if (e.detail.view === 'main') {
             updateTogetherDays();
-            setInterval(updateTogetherDays, 60000); // update every minute
+            setInterval(updateTogetherDays, 60000);
         }
+    });
+
+    window.addEventListener('space-changed', (e) => {
+        updateCountdownStyle(e.detail.spaceIndex);
     });
 }
 
@@ -31,26 +35,16 @@ function updateTogetherDays() {
     const now = new Date();
     const diffDays = Math.floor((now - start) / (1000 * 60 * 60 * 24));
 
-    // Calculate years/months/days
-    let years = now.getFullYear() - start.getFullYear();
-    let months = now.getMonth() - start.getMonth();
-    let days = now.getDate() - start.getDate();
-    if (days < 0) {
-        months--;
-        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-        days += prevMonth.getDate();
-    }
-    if (months < 0) { years--; months += 12; }
-
-    let display = `<span>我们在一起 <strong>${diffDays}</strong> 天啦</span>`;
-    if (years > 0) {
-        display = `<span>我们在一起 <strong>${years}</strong> 年 <strong>${months}</strong> 月 <strong>${days}</strong> 天啦</span>`;
-    } else if (months > 0) {
-        display = `<span>我们在一起 <strong>${months}</strong> 个月 <strong>${days}</strong> 天啦</span>`;
-    }
-
-    bar.innerHTML = display;
+    bar.innerHTML = `<span>我们在一起 <strong>${diffDays}</strong> 天啦</span>`;
     bar.classList.add('countdown-today');
+}
+
+function updateCountdownStyle(spaceIndex) {
+    const bar = document.getElementById('countdown-bar');
+    if (!bar) return;
+    // Bar blends with each space's bg — use soft tint per module
+    bar.style.background = 'transparent';
+    bar.style.borderBottom = '1px solid var(--border-color)';
 }
 
 /* ================================================================

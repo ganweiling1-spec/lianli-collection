@@ -22,8 +22,8 @@
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-card);
-    padding: var(--space-2);
-    padding-bottom: var(--space-4);
+    padding: var(--space-1);
+    padding-bottom: var(--space-2);
     transition: transform var(--duration-fast) var(--ease-out-expo),
                 box-shadow var(--duration-fast) var(--ease-out-expo);
     will-change: transform;
@@ -90,10 +90,10 @@
 .polaroid-solar-term {
     display: inline-block;
     font-family: var(--font-title);
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     color: var(--color-vermilion);
     opacity: 0.7;
-    margin-bottom: var(--space-1);
+    margin-bottom: 2px;
     padding: 1px 4px;
     border: 1px solid rgba(196, 90, 74, 0.2);
     border-radius: 2px;
@@ -106,24 +106,24 @@
 
 .polaroid-title {
     font-family: var(--font-body);
-    font-size: var(--font-size-sm);
+    font-size: 0.7rem;
     color: var(--text-primary);
     line-height: var(--leading-tight);
-    margin-bottom: var(--space-1);
+    margin-bottom: 1px;
 }
 
 .polaroid-description {
     font-family: var(--font-body);
-    font-size: var(--font-size-xs);
+    font-size: 0.6rem;
     color: rgba(58, 58, 58, 0.72);
     line-height: var(--leading-relaxed);
 }
 
 .polaroid-location {
     font-family: var(--font-body);
-    font-size: var(--font-size-xs);
+    font-size: 0.6rem;
     color: var(--text-muted);
-    margin-top: var(--space-2);
+    margin-top: var(--space-1);
 }
 
 /* === Ink Boot Print (replaces date stamp) === */
