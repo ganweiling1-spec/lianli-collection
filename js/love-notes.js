@@ -105,14 +105,14 @@ function renderList(notes, container) {
         const speakerLabel = appState.getSpeakerName(n.speaker);
         const speakerClass = n.speaker === 'her' ? 'her' : 'him';
         return `
-            <div class="note-list-item ${speakerClass}" data-id="${n.id}">
-                <div class="note-list-left">
-                    ${n.has_voice ? renderVoiceIcon(n) : ''}
+            <div class="note-list-item" data-id="${n.id}">
+                <div class="note-list-main">
+                    <span class="note-list-speaker ${speakerClass}">${speakerLabel}</span>
                     <span class="note-list-content">${escapeHTML(n.content)}</span>
                 </div>
-                <div class="note-list-right">
+                <div class="note-list-meta">
                     <span class="note-list-date">${formatDate(n.created_at)}</span>
-                    <span class="note-list-speaker ${speakerClass}">${speakerLabel}</span>
+                    ${n.has_voice ? renderVoiceIcon(n) : ''}
                     <span class="note-list-actions" data-actions="${n.id}">
                         <button class="card-action-btn" data-action="edit-note" data-id="${n.id}">编</button>
                         <button class="card-action-btn btn-delete" data-action="delete-note" data-id="${n.id}">删</button>

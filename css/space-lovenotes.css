@@ -14,26 +14,41 @@
 
 .note-list-item {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-3) var(--space-3);
+    flex-direction: column;
+    padding: var(--space-3);
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
     border-radius: 6px;
     cursor: pointer;
     transition: background var(--duration-fast);
+    writing-mode: horizontal-tb;
 }
 
 .note-list-item:active {
     background: rgba(0,0,0,0.02);
 }
 
-.note-list-left {
-    flex: 1;
-    min-width: 0;
+/* Row 1: speaker label + content */
+.note-list-main {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: var(--space-2);
+    writing-mode: horizontal-tb;
+}
+
+.note-list-speaker {
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.note-list-speaker.her {
+    color: #c45a4a;
+}
+
+.note-list-speaker.him {
+    color: #4a7a9e;
 }
 
 .note-list-content {
@@ -43,14 +58,17 @@
     line-height: var(--leading-relaxed);
     text-align: justify;
     writing-mode: horizontal-tb;
+    flex: 1;
+    min-width: 0;
 }
 
-.note-list-right {
-    flex-shrink: 0;
+/* Row 2: date + voice + actions */
+.note-list-meta {
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    margin-left: var(--space-3);
+    margin-top: var(--space-1);
+    writing-mode: horizontal-tb;
 }
 
 .note-list-date {
@@ -58,24 +76,7 @@
     font-size: 0.6rem;
     color: var(--text-muted);
     white-space: nowrap;
-}
-
-.note-list-speaker {
-    font-family: var(--font-title);
-    font-size: 0.6rem;
-    padding: 1px 6px;
-    border-radius: 3px;
-    white-space: nowrap;
-}
-
-.note-list-speaker.her {
-    color: #c45a4a;
-    background: rgba(196, 90, 74, 0.06);
-}
-
-.note-list-speaker.him {
-    color: #4a7a9e;
-    background: rgba(74, 122, 158, 0.06);
+    flex: 1;
 }
 
 /* Edit/delete buttons hidden by default, shown on click */
