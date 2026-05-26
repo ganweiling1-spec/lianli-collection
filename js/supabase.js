@@ -102,14 +102,18 @@ export async function fetchScrollContent() {
 // --- Storage: Upload ---
 
 export async function uploadFile(bucket, filePath, file) {
-    const { data, error } = await supabase.storage
-        .from(bucket)
-        .upload(filePath, file, {
-            cacheControl: '3600',
-            upsert: true,
-        });
-    if (error) throw error;
-    return data;
+    const form = new FormData();
+    form.append('file', file);
+    const r = await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${filePath}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+        body: form,
+    });
+    if (!r.ok) {
+        const text = await r.text();
+        throw new Error(text || `Upload failed with status ${r.status}`);
+    }
+    return await r.json();
 }
 
 export async function uploadImage(file) {
@@ -128,10 +132,14 @@ export async function uploadAudio(blob) {
 }
 
 export async function deleteStorageFile(bucket, path) {
-    const { error } = await supabase.storage
-        .from(bucket)
-        .remove([path]);
-    if (error) throw error;
+    const r = await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${path}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+    });
+    if (!r.ok) {
+        const text = await r.text();
+        throw new Error(text || `Delete failed with status ${r.status}`);
+    }
 }
 
 // --- URL Helpers ---
