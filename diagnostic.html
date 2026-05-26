@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>无色笺 — 存储诊断</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #f5f0e8;
+            padding: 16px;
+            color: #3a3a3a;
+        }
+        h1 { font-size: 1.2rem; margin-bottom: 16px; text-align: center; }
+        .result {
+            background: #fff;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            font-family: 'SF Mono', 'Cascadia Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.6;
+        }
+        .result.ok { border-left: 3px solid #4caf50; }
+        .result.fail { border-left: 3px solid #e53935; }
+        .result.warn { border-left: 3px solid #ff9800; }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #c45a4a;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+        .btn:active { opacity: 0.8; }
+        .spinner {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <h1>存储诊断工具</h1>
+    <button class="btn" id="run-btn" onclick="runDiagnostic()">开始诊断</button>
+    <div id="output"></div>
+
+    <script>
+        const SUPABASE_URL = 'https://dstvhnsoxbltzloiwbqv.supabase.co';
+        const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzdHZobnNveGJsdHpsb2l3YnF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0MTM1MDgsImV4cCI6MjA5NDk4OTUwOH0.m1YcrmhzYhGezLdR3J_q7X7NtvmxfXA8OXyRAp_kexk';
+
+        function $(sel) { return document.querySelector(sel); }
+
+        function addLine(text, type) {
+            const div = document.createElement('div');
+            div.className = 'result ' + (type || 'ok');
+            div.textContent = text;
+            $('#output').appendChild(div);
+        }
+
+        async function runDiagnostic() {
+            $('#output').innerHTML = '<div class="spinner">检测中...</div>';
+            $('#run-btn').disabled = true;
+            $('#run-btn').textContent = '检测中...';
+
+            // 1. Connectivity
+            try {
+                const r = await fetch(`${SUPABASE_URL}/rest/v1/`, { headers: { apikey: ANON_KEY } });
+                addLine('[1/6] Supabase 连接: OK', r.ok ? 'ok' : 'fail');
+            } catch (e) {
+                addLine('[1/6] Supabase 连接: 失败 — ' + e.message, 'fail');
+            }
+
+            // 2. Buckets
+            try {
+                const r = await fetch(`${SUPABASE_URL}/storage/v1/bucket`, {
+                    headers: { Authorization: `Bearer ${ANON_KEY}` }
+                });
+                if (r.ok) {
+                    const buckets = await r.json();
+                    if (buckets.length === 0) {
+                        addLine('[2/6] Storage Buckets: 空！需运行 fix-all-policies.sql', 'fail');
+                    } else {
+                        let names = buckets.map(b => `${b.name}(public=${b.public})`).join(', ');
+                        const hasImg = buckets.find(b => b.name === 'moments-images');
+                        const hasVoice = buckets.find(b => b.name === 'voice-recordings');
+                        addLine('[2/6] Buckets: ' + names, (hasImg && hasVoice) ? 'ok' : 'fail');
+                        if (!hasImg) addLine('  ⚠ 缺少 moments-images bucket!', 'fail');
+                        if (!hasVoice) addLine('  ⚠ 缺少 voice-recordings bucket!', 'fail');
+                    }
+                } else {
+                    addLine('[2/6] 列出 Buckets 失败: ' + r.status, 'fail');
+                }
+            } catch (e) {
+                addLine('[2/6] 列出 Buckets 失败: ' + e.message, 'fail');
+            }
+
+            // 3. Table RLS SELECT
+            const tables = ['moments', 'love_notes', 'habits'];
+            let allSelectOk = true;
+            for (const t of tables) {
+                try {
+                    const r = await fetch(`${SUPABASE_URL}/rest/v1/${t}?select=id&limit=1`, {
+                        headers: { apikey: ANON_KEY }
+                    });
+                    if (!r.ok) allSelectOk = false;
+                } catch (e) { allSelectOk = false; }
+            }
+            addLine('[3/6] 表 RLS (SELECT): ' + (allSelectOk ? 'OK' : 'FAIL'), allSelectOk ? 'ok' : 'fail');
+
+            // 4. Table RLS INSERT
+            try {
+                const r = await fetch(`${SUPABASE_URL}/rest/v1/moments`, {
+                    method: 'POST',
+                    headers: { apikey: ANON_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+                    body: JSON.stringify({ title: '__diag__', recorded_date: '2025-01-01' }),
+                });
+                if (r.ok) {
+                    addLine('[4/6] 表 RLS (moments INSERT): OK', 'ok');
+                } else {
+                    const t = await r.text();
+                    addLine('[4/6] 表 RLS (moments INSERT): FAIL — ' + t.slice(0, 150), 'fail');
+                }
+            } catch (e) {
+                addLine('[4/6] 表 RLS (moments INSERT): ' + e.message, 'fail');
+            }
+
+            // 5. Upload test
+            try {
+                const testBlob = new Blob(['test'], { type: 'image/png' });
+                const testFile = new File([testBlob], 'diag-test.png', { type: 'image/png' });
+                const testPath = `_diagnostic_/${Date.now()}.png`;
+                const form = new FormData();
+                form.append('file', testFile);
+                const r = await fetch(`${SUPABASE_URL}/storage/v1/object/moments-images/${testPath}`, {
+                    method: 'POST',
+                    headers: { Authorization: `Bearer ${ANON_KEY}` },
+                    body: form,
+                });
+                if (r.ok) {
+                    addLine('[5/6] Storage 上传测试: OK ✓', 'ok');
+                    // Cleanup
+                    await fetch(`${SUPABASE_URL}/storage/v1/object/moments-images/${testPath}`, {
+                        method: 'DELETE',
+                        headers: { Authorization: `Bearer ${ANON_KEY}` },
+                    });
+                    addLine('  → 测试文件已清理', 'ok');
+                } else {
+                    const err = await r.text();
+                    addLine('[5/6] Storage 上传测试: FAIL — ' + err.slice(0, 200), 'fail');
+                }
+            } catch (e) {
+                addLine('[5/6] Storage 上传测试: FAIL — ' + e.message, 'fail');
+            }
+
+            // 6. Check if buckets are public
+            try {
+                const r = await fetch(`${SUPABASE_URL}/storage/v1/bucket/moments-images`, {
+                    headers: { Authorization: `Bearer ${ANON_KEY}` }
+                });
+                if (r.ok) {
+                    const info = await r.json();
+                    if (info.public) {
+                        addLine('[6/6] Bucket 公开访问: OK (public=true)', 'ok');
+                    } else {
+                        addLine('[6/6] Bucket 公开访问: ⚠ public=false，图片无法直接访问!', 'warn');
+                    }
+                } else {
+                    const t = await r.text();
+                    addLine('[6/6] Bucket 信息获取失败: ' + r.status + ' ' + t.slice(0, 100), 'fail');
+                }
+            } catch (e) {
+                addLine('[6/6] Bucket 信息获取失败: ' + e.message, 'fail');
+            }
+
+            addLine('--- 诊断完成 ---\n如果项 2 或 5 显示 FAIL：请确认已在 Supabase SQL Editor 运行 fix-all-policies.sql', 'warn');
+
+            $('#run-btn').disabled = false;
+            $('#run-btn').textContent = '重新诊断';
+        }
+    </script>
+</body>
+</html>
